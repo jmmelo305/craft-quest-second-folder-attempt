@@ -8,6 +8,7 @@ Date: April 28, 2026
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import CraftQuestApp.*;
 
 public class TileTest {
 

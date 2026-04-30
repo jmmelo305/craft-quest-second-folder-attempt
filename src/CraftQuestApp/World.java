@@ -1,3 +1,4 @@
+package CraftQuestApp;
 
 /*
 Programmer: Melo

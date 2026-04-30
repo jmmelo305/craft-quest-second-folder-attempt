@@ -1,3 +1,4 @@
+package CraftQuestApp;
 
 import java.util.Scanner;
 
