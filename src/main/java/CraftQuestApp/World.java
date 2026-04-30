@@ -167,7 +167,7 @@ class Player{
         // Auto collects a chest if the player lands on one
         if (target.isCollectible()){
             target.collect();
-            inventory.addItem("Chset Loot");
+            inventory.addItem("Chest Loot");
         }
         // tells the View something has changed. 
         notifyObservers();
