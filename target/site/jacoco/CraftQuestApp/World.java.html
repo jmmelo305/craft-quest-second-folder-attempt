@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>World.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">craftquest</a> &gt; <a href="index.source.html" class="el_package">CraftQuestApp</a> &gt; <span class="el_source">World.java</span></div><h1>World.java</h1><pre class="source lang-java linenums">package CraftQuestApp;
+
+/*
+Programmer: Melo
+Program: Model File for CraftQuest
+Purpose: Model file - part of the MVC of the project
+         stores and manage's the game's data and logic
+Date: April 23, 2026
+*/
+
+import java.util.*;
+
+// Any class that implements GameObserver will include
+// onGameUpdated(), the View.java file implements this later on.
+interface GameObserver {
+    void onGameUpdated();
+}
+
+// The purpose of this method is that any class that implements
+// Map Strategy will create the 2D array of Tile objects - Two maps created will use this.
+interface MapStrategy {
+    Tile[][] generate (int width, int height);
+}
+
+// Creates Tile class, by using an enum (w3schools.com/java/java_enums.asp) 
+// it allows for the list of options to only be Grass, Stone, Water &amp; Chests. 
+// Only these options, no need to worry about numbers or strings
+class Tile {
+<span class="fc" id="L29">    enum Type {GRASS, STONE, WATER, CHEST}</span>
+
+    // Stores what kind of tile Type (G, S, W, C) it is
+    private Type type; 
+
+    // Has this chest been collected or not (T or F)
+    private boolean collected;
+
+
+    // Constructor for Tile class 
+<span class="fc" id="L39">    Tile(Type type){</span>
+<span class="fc" id="L40">        this.type = type;</span>
+<span class="fc" id="L41">        this.collected = false;</span>
+<span class="fc" id="L42">    }</span>
+
+    // Get Methods
+    Type getType(){
+<span class="fc" id="L46">        return type;</span>
+    }
+    boolean isCollected (){ 
+<span class="fc" id="L49">        return collected; </span>
+    }
+
+    // The player can walk on all the tiles except water, so this method is created 
+    // make water unwalkable
+    boolean isWalkable(){
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        return type != Type.WATER;</span>
+    }
+
+    // Method to check if the tile is collectible only if it's a CHEST and it hasn't been collected yet.
+    // &amp;&amp; means that both conditions must be true, and the !collected means that collected is false. 
+    boolean isCollectible(){
+<span class="fc bfc" id="L61" title="All 4 branches covered.">        return type == Type.CHEST &amp;&amp; !collected; </span>
+    }
+
+    // method that gets called when the play steps on a chest.
+    void collect (){
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if (type == Type.CHEST){</span>
+<span class="fc" id="L67">            collected = true; </span>
+        }
+<span class="fc" id="L69">    }</span>
+    
+    // Switch case to draw the corresponding tile on the screen
+    // depending on the tile type
+    // collected  ? &quot;o&quot; : &quot;C&quot;
+    // represents that if the chest has been collected it returns &quot;o&quot;, but if it hasn't it returns &quot;C&quot;
+    String toSymbol(){
+<span class="pc bpc" id="L76" title="1 of 5 branches missed.">        switch(type){</span>
+<span class="fc" id="L77">            case GRASS: return &quot;.&quot;;</span>
+<span class="fc" id="L78">            case STONE: return &quot;#&quot;;</span>
+<span class="fc" id="L79">            case WATER: return &quot;~&quot;;</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            case CHEST: return collected ? &quot;o&quot; : &quot;C&quot;;</span>
+<span class="nc" id="L81">            default:    return &quot;?&quot;;</span>
+        }
+    }
+}
+
+class Inventory {
+// The only job of this class is to store a list of the items the player has collected. 
+    
+// List to store items, only strings. 
+    private List &lt;String&gt; items;
+
+    // Constructor 
+<span class="fc" id="L93">    Inventory (){ </span>
+<span class="fc" id="L94">        this.items = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L95">    }</span>
+
+
+    // Created a null item exception error - Error Handling
+    void addItem(String item){
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        if (item == null){</span>
+<span class="fc" id="L101">            throw new IllegalArgumentException(&quot;Item cannot be null&quot;);</span>
+        }
+<span class="fc" id="L103">        items. add(item);</span>
+<span class="fc" id="L104">    }</span>
+
+    // getters
+    List&lt;String&gt; getItems() {
+<span class="fc" id="L108">        return items;</span>
+    }
+    int getItemCount(){
+<span class="fc" id="L111">        return items.size();</span>
+    }
+}
+
+
+// Class made to track player's position on the grid, holds their inventory,
+// and notifies the View everytime something changes
+class Player{
+    // variables for this class.
+    private int x;
+    private int y;
+
+    private Inventory inventory;
+    private List&lt;GameObserver&gt; observers; 
+
+
+    // Constructor
+<span class="fc" id="L128">    Player(int startX, int startY){</span>
+<span class="fc" id="L129">        this.x = startX;</span>
+<span class="fc" id="L130">        this.y = startY;</span>
+<span class="fc" id="L131">        this.inventory = new Inventory();</span>
+<span class="fc" id="L132">        this.observers = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L133">    }</span>
+
+    // two methods that run the entire observer pattern on the player side
+    void addObserver (GameObserver observer){
+<span class="nc" id="L137">        observers.add(observer);</span>
+<span class="nc" id="L138">    }</span>
+    private void notifyObservers(){
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">        for (GameObserver o: observers){</span>
+<span class="nc" id="L141">            o.onGameUpdated();</span>
+<span class="nc" id="L142">        }</span>
+<span class="fc" id="L143">    }</span>
+
+    // method that focuses on movements in the game. 
+    void move (int dx, int dy, World world){
+        // initializing variables
+        int newX; 
+        int newY;
+<span class="fc" id="L150">        newX = x + dx;</span>
+<span class="fc" id="L151">        newY = y + dy;</span>
+
+        // Blocks movement into non - walkable tiles
+<span class="fc bfc" id="L154" title="All 4 branches covered.">        if (newX &lt; 0 || newX &gt;= world.getWidth())</span>
+<span class="fc" id="L155">            return;</span>
+<span class="fc bfc" id="L156" title="All 4 branches covered.">        if (newY &lt; 0 || newY &gt;= world.getHeight()) </span>
+<span class="fc" id="L157">            return;</span>
+
+        // !target.isWalkable() means if if the targetted tile IS NOT walkable then it prevents the movement into it.
+<span class="fc" id="L160">        Tile target = world.getTile(newX, newY);</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">        if (!target.isWalkable()) return; </span>
+
+        // Move is valid, updates position
+<span class="fc" id="L164">        x = newX;</span>
+<span class="fc" id="L165">        y = newY; </span>
+
+        // Auto collects a chest if the player lands on one
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        if (target.isCollectible()){</span>
+<span class="fc" id="L169">            target.collect();</span>
+<span class="fc" id="L170">            inventory.addItem(&quot;Chset Loot&quot;);</span>
+        }
+        // tells the View something has changed. 
+<span class="fc" id="L173">        notifyObservers();</span>
+<span class="fc" id="L174">    }</span>
+
+    // getters
+    int getX (){
+<span class="fc" id="L178">        return x;</span>
+    }
+
+    int getY (){
+<span class="fc" id="L182">        return y;</span>
+    }
+    Inventory getInventory(){
+<span class="fc" id="L185">        return inventory;</span>
+    }
+}
+
+<span class="fc" id="L189">class FixedMapStrategy implements MapStrategy {</span>
+
+    @Override
+    public Tile[][] generate(int width, int height) {
+<span class="fc" id="L193">        Tile[][] grid = new Tile[height][width];</span>
+
+        // Fill everything with GRASS
+<span class="fc bfc" id="L196" title="All 2 branches covered.">        for (int row = 0; row &lt; height; row++)</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">            for (int col = 0; col &lt; width; col++)</span>
+<span class="fc" id="L198">                grid[row][col] = new Tile(Tile.Type.GRASS);</span>
+
+        // Water river down column 4
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        for (int row = 0; row &lt; height; row++)</span>
+<span class="fc" id="L202">            grid[row][4] = new Tile(Tile.Type.WATER);</span>
+
+        // Stone patches
+<span class="fc" id="L205">        grid[2][2] = new Tile(Tile.Type.STONE);</span>
+<span class="fc" id="L206">        grid[2][3] = new Tile(Tile.Type.STONE);</span>
+<span class="fc" id="L207">        grid[6][7] = new Tile(Tile.Type.STONE);</span>
+<span class="fc" id="L208">        grid[7][7] = new Tile(Tile.Type.STONE);</span>
+
+        // Three chests to find
+<span class="fc" id="L211">        grid[1][8] = new Tile(Tile.Type.CHEST);</span>
+<span class="fc" id="L212">        grid[5][6] = new Tile(Tile.Type.CHEST);</span>
+<span class="fc" id="L213">        grid[8][1] = new Tile(Tile.Type.CHEST);</span>
+
+<span class="fc" id="L215">        return grid;</span>
+    }
+}
+
+
+// RANDOM MAP STRATEGY — Strategy Design Pattern
+// Generates a different map every time the game is played.
+
+<span class="fc" id="L223">class RandomMapStrategy implements MapStrategy {</span>
+
+    @Override
+    public Tile[][] generate(int width, int height) {
+<span class="fc" id="L227">        Tile[][] grid = new Tile[height][width];</span>
+<span class="fc" id="L228">        Random rand = new Random();</span>
+
+<span class="fc bfc" id="L230" title="All 2 branches covered.">        for (int row = 0; row &lt; height; row++) {</span>
+<span class="fc bfc" id="L231" title="All 2 branches covered.">            for (int col = 0; col &lt; width; col++) {</span>
+<span class="fc" id="L232">                int roll = rand.nextInt(100);</span>
+<span class="fc bfc" id="L233" title="All 2 branches covered.">                if      (roll &lt; 10) grid[row][col] = new Tile(Tile.Type.WATER);</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">                else if (roll &lt; 25) grid[row][col] = new Tile(Tile.Type.STONE);</span>
+<span class="fc" id="L235">                else                grid[row][col] = new Tile(Tile.Type.GRASS);</span>
+            }
+        }
+
+        // Place exactly 3 chests on random GRASS tiles
+<span class="fc" id="L240">        int chestsPlaced = 0;</span>
+<span class="fc bfc" id="L241" title="All 2 branches covered.">        while (chestsPlaced &lt; 3) {</span>
+<span class="fc" id="L242">            int row = rand.nextInt(height);</span>
+<span class="fc" id="L243">            int col = rand.nextInt(width);</span>
+<span class="fc bfc" id="L244" title="All 2 branches covered.">            if (grid[row][col].getType() == Tile.Type.GRASS) {</span>
+<span class="fc" id="L245">                grid[row][col] = new Tile(Tile.Type.CHEST);</span>
+<span class="fc" id="L246">                chestsPlaced++;</span>
+            }
+<span class="fc" id="L248">        }</span>
+
+        // Always keep spawn point (0,0) clear
+<span class="fc" id="L251">        grid[0][0] = new Tile(Tile.Type.GRASS);</span>
+<span class="fc" id="L252">        return grid;</span>
+    }
+}
+
+// WORLD — holds the tile grid, exposes access + win condition
+// Uses a MapStrategy to generate its grid at construction.
+// Does not care HOW the map is built — just that it gets one.
+public class World {
+
+    private Tile[][] grid;
+    private int width, height;
+
+<span class="fc" id="L264">    public World(int width, int height, MapStrategy strategy) {</span>
+<span class="fc" id="L265">        this.width  = width;</span>
+<span class="fc" id="L266">        this.height = height;</span>
+<span class="fc" id="L267">        this.grid   = strategy.generate(width, height);</span>
+<span class="fc" id="L268">    }</span>
+
+<span class="fc" id="L270">    public Tile getTile(int x, int y) { return grid[y][x]; }</span>
+<span class="fc" id="L271">    public int getWidth()             { return width; }</span>
+<span class="fc" id="L272">    public int getHeight()            { return height; }</span>
+
+    /** Returns true only when every chest on the map is collected */
+    public boolean allChestsCollected() {
+<span class="fc bfc" id="L276" title="All 2 branches covered.">        for (int row = 0; row &lt; height; row++)</span>
+<span class="fc bfc" id="L277" title="All 2 branches covered.">            for (int col = 0; col &lt; width; col++) {</span>
+<span class="fc" id="L278">                Tile t = grid[row][col];</span>
+<span class="fc bfc" id="L279" title="All 4 branches covered.">                if (t.getType() == Tile.Type.CHEST &amp;&amp; !t.isCollected())</span>
+<span class="fc" id="L280">                    return false;</span>
+        }
+<span class="fc" id="L282">        return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
