@@ -1,3 +1,5 @@
+package CraftQuestApp;
+
 /*
 Programmer: Jose Melo
 Program: PlayerTest.java
@@ -63,5 +65,48 @@ public class PlayerTest {
         Player p = new Player(7, 1);
         p.move(1, 0, world); // move to (8,1) which has a CHEST
         assertEquals(1, p.getInventory().getItemCount());
+    }
+
+    @Test
+    public void testMoveLeft() {
+        Player p = new Player(6, 5); // avoid column 4 (water)
+        p.move(-1, 0, world);
+        assertEquals(5, p.getX());
+        assertEquals(5, p.getY());
+    }
+
+    @Test
+    public void testMoveUp() {
+        Player p = new Player(5, 5);
+        p.move(0, -1, world);
+        assertEquals(5, p.getX());
+        assertEquals(4, p.getY());
+    }
+
+    @Test
+    public void testCannotMoveOutOfBoundsRight() {
+        Player p = new Player(9, 5); // at right edge
+        p.move(1, 0, world);
+        assertEquals(9, p.getX()); // blocked
+    }
+
+    @Test
+    public void testCannotMoveOutOfBoundsBottom() {
+        Player p = new Player(5, 9); // at bottom edge
+        p.move(0, 1, world);
+        assertEquals(9, p.getY()); // blocked
+    }
+
+    @Test
+    public void testMultipleMoves() {
+        player.move(1, 0, world);
+        player.move(0, 1, world);
+        assertEquals(1, player.getX());
+        assertEquals(1, player.getY());
+    }
+
+    @Test
+    public void testInventoryInitiallyEmpty() {
+        assertEquals(0, player.getInventory().getItemCount());
     }
 }

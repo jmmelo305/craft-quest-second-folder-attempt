@@ -1,3 +1,5 @@
+package CraftQuestApp;
+
 /*
 Programmer: Jose Melo
 Program: TileTest.java
@@ -54,5 +56,36 @@ public class TileTest {
     public void testGrassIsNotCollectible() {
         Tile t = new Tile(Tile.Type.GRASS);
         assertFalse(t.isCollectible());
+    }
+
+    @Test
+    public void testGrassToSymbol() {
+        Tile t = new Tile(Tile.Type.GRASS);
+        assertEquals(".", t.toSymbol());
+    }
+
+    @Test
+    public void testStoneToSymbol() {
+        Tile t = new Tile(Tile.Type.STONE);
+        assertEquals("#", t.toSymbol());
+    }
+
+    @Test
+    public void testWaterToSymbol() {
+        Tile t = new Tile(Tile.Type.WATER);
+        assertEquals("~", t.toSymbol());
+    }
+
+    @Test
+    public void testChestToSymbolBeforeCollection() {
+        Tile t = new Tile(Tile.Type.CHEST);
+        assertEquals("C", t.toSymbol());
+    }
+
+    @Test
+    public void testChestToSymbolAfterCollection() {
+        Tile t = new Tile(Tile.Type.CHEST);
+        t.collect();
+        assertEquals("o", t.toSymbol());
     }
 }

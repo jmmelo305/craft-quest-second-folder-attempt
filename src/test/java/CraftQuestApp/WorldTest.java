@@ -1,3 +1,5 @@
+package CraftQuestApp;
+
 /*
 Programmer: Jose Melo
 Program: WorldTest.java
