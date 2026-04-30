@@ -27,7 +27,7 @@ public class Main {
         System.out.print("  >>> ");
 
         String choice = scanner.nextLine().trim();
-        scanner.close();
+        // Note: Don't close scanner here - Controller needs System.in for game input
 
         // --- Strategy Pattern ---
         // Swap the map generation algorithm at runtime
