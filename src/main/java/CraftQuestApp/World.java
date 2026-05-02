@@ -143,7 +143,8 @@ class Player{
     }
 
     // method that focuses on movements in the game. 
-    void move (int dx, int dy, World world){
+    // Returns true if move succeeded, false if blocked
+    boolean move (int dx, int dy, World world){
         // initializing variables
         int newX; 
         int newY;
@@ -152,13 +153,13 @@ class Player{
 
         // Blocks movement into non - walkable tiles
         if (newX < 0 || newX >= world.getWidth())
-            return;
+            return false;
         if (newY < 0 || newY >= world.getHeight()) 
-            return;
+            return false;
 
         // !target.isWalkable() means if if the targetted tile IS NOT walkable then it prevents the movement into it.
         Tile target = world.getTile(newX, newY);
-        if (!target.isWalkable()) return; 
+        if (!target.isWalkable()) return false; 
 
         // Move is valid, updates position
         x = newX;
@@ -171,6 +172,7 @@ class Player{
         }
         // tells the View something has changed. 
         notifyObservers();
+        return true;
     }
 
     // getters
@@ -197,9 +199,11 @@ class FixedMapStrategy implements MapStrategy {
             for (int col = 0; col < width; col++)
                 grid[row][col] = new Tile(Tile.Type.GRASS);
 
-        // Water river down column 4
-        for (int row = 0; row < height; row++)
-            grid[row][4] = new Tile(Tile.Type.WATER);
+        // Water ponds
+        grid[3][3] = new Tile(Tile.Type.WATER);
+        grid[3][4] = new Tile(Tile.Type.WATER);
+        grid[4][3] = new Tile(Tile.Type.WATER);
+        grid[4][4] = new Tile(Tile.Type.WATER);
 
         // Stone patches
         grid[2][2] = new Tile(Tile.Type.STONE);

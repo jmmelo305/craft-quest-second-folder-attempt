@@ -31,22 +31,31 @@ public class Controller {
             System.out.print("\n  Your move >>> ");
             String input = scanner.nextLine().trim().toLowerCase();
 
+            boolean moved = false;
             switch (input) {
-                case "w": player.move( 0, -1, world); break; // up
-                case "s": player.move( 0,  1, world); break; // down
-                case "a": player.move(-1,  0, world); break; // left
-                case "d": player.move( 1,  0, world); break; // right
+                case "w": moved = player.move( 0, -1, world); break; // up
+                case "s": moved = player.move( 0,  1, world); break; // down
+                case "a": moved = player.move(-1,  0, world); break; // left
+                case "d": moved = player.move( 1,  0, world); break; // right
                 case "q":
                     System.out.println("\n  Thanks for playing CraftQuest. Goodbye!");
                     scanner.close();
                     return;
                 default:
                     System.out.println("  Unknown key. Use W/A/S/D to move, Q to quit.");
+                    continue; // Skip the rest of the loop iteration
             }
+
+            // Check if move was blocked
+            if (!moved) {
+                System.out.println("  You can't walk there! That tile is blocked.");
+                continue; // Don't re-render the board for blocked moves
+            }
+
+            view.render(); // draw board after every move
 
             // Check win condition after every move
             if (world.allChestsCollected()) {
-                view.render();
                 System.out.println("\n  *** YOU WIN! All chests have been found! ***");
                 System.out.println("  Final loot: " + player.getInventory().getItems());
                 scanner.close();

@@ -1,16 +1,12 @@
 package CraftQuestApp;
 import java.util.Scanner;
 
-
-// Main File: Responsible for starting CraftQuest program
-// Responsibilities:
-//   1. Ask player to choose a map type (Strategy pattern)
-//   2. Construct the Model (World + Player)
-//   3. Construct the View
-//   4. Register the View as an Observer of the Player
-//   5. Hand control to the Controller
-//
-
+/*
+Programmer: Jose Melo
+Program: Main.java
+Purpose: The main file responsible for starting the CraftQuest program.
+Date: 4/28/2026
+*/
 
 public class Main {
 
@@ -21,14 +17,52 @@ public class Main {
         System.out.println("          Welcome to CraftQuest!            ");
         System.out.println("  A Minecraft-inspired console explorer     ");
         System.out.println("=============================================");
+        System.out.println("            How to play:                    ");
+        System.out.println("  - Use W, A, S, D to move                 ");
+        System.out.println("  - Press Q to quit                        ");
+        System.out.println("  - Find chests to collect loot            ");
+        System.out.println("  - Explore the world and collect all chests to win!        ");
+        System.out.println("=============================================");
+        System.out.println(" Press E to continue! ");
+        System.out.println(" Press Q to quit! ");
+        while (true) {
+            String input = scanner.nextLine().trim().toLowerCase();
+            if (input.equals("e")) {
+                break;
+            }
+            if (input.equals("q")) {
+                System.out.println("\n  Thanks for playing CraftQuest. Goodbye!");
+                scanner.close();
+                return;
+            }
+            System.out.println("  Invalid input. Please press E to continue or Q to quit.");
+        }
+
         System.out.println("  Choose your map type:");
         System.out.println("    1 - Fixed map  (same layout every time)");
         System.out.println("    2 - Random map (new world every time)  ");
+        System.out.println("    Q - Quit");
         System.out.print("  >>> ");
 
-        String choice = scanner.nextLine().trim();
+        String choice;
+        while (true) {
+            choice = scanner.nextLine().trim().toLowerCase();
+            
+            if (choice.equals("q")) {
+                System.out.println("\n  Thanks for playing CraftQuest. Goodbye!");
+                scanner.close();
+                return;
+            }
+            
+            if (choice.equals("1") || choice.equals("2")) {
+                break;
+            }
+            
+            System.out.println("  Invalid input. Please enter 1, 2, or Q to quit.");
+            System.out.print("  >>> ");
+        }
         // Note: Don't close scanner here - Controller needs System.in for game input
-
+        
         // --- Strategy Pattern ---
         // Swap the map generation algorithm at runtime
         // based on player's choice — no if/else inside World needed.
