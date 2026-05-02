@@ -22,6 +22,7 @@ public class Main {
         System.out.println("  - Press Q to quit                        ");
         System.out.println("  - Find chests to collect loot            ");
         System.out.println("  - Explore the world and collect all chests to win!        ");
+        System.out.println("  - Press Enter after each move to continue");
         System.out.println("=============================================");
         System.out.println(" Press E to continue! ");
         System.out.println(" Press Q to quit! ");
