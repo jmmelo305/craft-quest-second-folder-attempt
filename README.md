@@ -54,11 +54,6 @@ CraftQuestApp/
     │   │   └── GameView.java
     │   └── controller/
     │       └── GameController.java
-    └── test/java/com/craftquest/
-        ├── TileTest.java
-        ├── InventoryTest.java
-        ├── PlayerTest.java
-        └── WorldTest.java
 ```
 
 ## Design Patterns Implemented. 
