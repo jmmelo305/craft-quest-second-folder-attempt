@@ -1,0 +1,8 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+craftquest,CraftQuestApp,Inventory,0,28,0,2,0,9,0,5,0,4
+craftquest,CraftQuestApp,Player,14,97,2,14,4,27,3,12,1,6
+craftquest,CraftQuestApp,RandomMapStrategy,0,129,0,12,0,22,0,8,0,2
+craftquest,CraftQuestApp,FixedMapStrategy,0,146,0,4,0,23,0,4,0,2
+craftquest,CraftQuestApp,Tile.Type,0,27,0,0,0,1,0,1,0,1
+craftquest,CraftQuestApp,Tile,2,70,3,14,1,20,3,16,0,9
+craftquest,CraftQuestApp,World,0,62,0,8,0,14,0,9,0,5

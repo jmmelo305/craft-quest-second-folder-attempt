@@ -100,3 +100,7 @@ This design pattern allows for a wide variety of random maps to be generated wit
 
 ## Known Issues:
 - Chest count is limited to only 3 chests per map. (This is done on purpose to keep the program simple)
+
+## Commits on the previous Repo:
+
+![alt text](<Screenshot 2026-05-01 at 11.30.17 PM.png>)
