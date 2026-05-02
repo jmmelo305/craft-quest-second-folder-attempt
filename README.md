@@ -36,24 +36,26 @@
 
 ```
 CraftQuestApp/
-├── pom.xml
-├── README.md
-└── src/
-    ├── main/java/com/craftquest/
-    │   ├── Main.java
-    │   ├── model/
-    │   │   ├── Tile.java
-    │   │   ├── Inventory.java
-    │   │   ├── Player.java
-    │   │   ├── World.java
-    │   │   ├── GameObserver.java
-    │   │   ├── MapStrategy.java
-    │   │   ├── MapOneStrategy.java
-    │   │   └── MapTwoStrategy.java
-    │   ├── view/
-    │   │   └── GameView.java
-    │   └── controller/
-    │       └── GameController.java
+├── src/main/java/CraftQuestApp/World.java
+│   ├── Tile class
+│   ├── Inventory class  
+│   ├── Player class
+│   ├── MapStrategy interface
+│   ├── FixedMapStrategy class
+│   ├── RandomMapStrategy class
+│   └── World class
+ 
+VIEW
+├── src/main/java/CraftQuestApp/View.java
+│   └── View class
+ 
+CONTROLLER
+├── src/main/java/CraftQuestApp/Controller.java
+│   └── Controller class
+ 
+MAIN
+├── src/main/java/CraftQuestApp/Main.java
+│   └── Main class
 ```
 
 ## Design Patterns Implemented. 
@@ -93,6 +95,8 @@ This design pattern allows for a wide variety of random maps to be generated wit
 ##### I also used ClaudeAI to help me figure out the issue I was having with the file paths (explains why I have another Repo listed).
 
 ##### I also used ClaudeAI to help me get Maven running on macOS. Claude provided me with the commands necessary to run the JUnit tests and CraftQuest in the terminal. 
+
+#### Claude was also used to generate the MVC design structure mentioned above. 
 
 ## Known Issues:
 - Chest count is limited to only 3 chests per map. (This is done on purpose to keep the program simple)
