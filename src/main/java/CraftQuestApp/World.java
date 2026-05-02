@@ -229,15 +229,15 @@ class FixedMapStrategy implements MapStrategy {
 
         // Three chests to find - each with unique loot
         Tile chest1 = new Tile(Tile.Type.CHEST);
-        chest1.setChestLoot("Loot A");
+        chest1.setChestLoot("Diamond");
         grid[1][8] = chest1;
 
         Tile chest2 = new Tile(Tile.Type.CHEST);
-        chest2.setChestLoot("Loot B");
+        chest2.setChestLoot("Iron");
         grid[5][6] = chest2;
 
         Tile chest3 = new Tile(Tile.Type.CHEST);
-        chest3.setChestLoot("Loot C");
+        chest3.setChestLoot("Gold");
         grid[8][1] = chest3;
 
         return grid;
