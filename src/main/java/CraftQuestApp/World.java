@@ -34,6 +34,9 @@ class Tile {
     // Has this chest been collected or not (T or F)
     private boolean collected;
 
+    // Stores the unique loot inside this chest
+    private String chestLoot;
+
 
     // Constructor for Tile class 
     Tile(Type type){
@@ -66,6 +69,18 @@ class Tile {
         if (type == Type.CHEST){
             collected = true; 
         }
+    }
+
+    // Set the loot for this chest (only used when creating chests)
+    void setChestLoot(String loot){
+        if (type == Type.CHEST){
+            this.chestLoot = loot;
+        }
+    }
+
+    // Get the loot from this chest
+    String getChestLoot(){
+        return chestLoot;
     }
     
     // Switch case to draw the corresponding tile on the screen
@@ -167,8 +182,9 @@ class Player{
 
         // Auto collects a chest if the player lands on one
         if (target.isCollectible()){
+            String loot = target.getChestLoot();
             target.collect();
-            inventory.addItem("Chest Loot");
+            inventory.addItem(loot != null ? loot : "Mystery Loot");
         }
         // tells the View something has changed. 
         notifyObservers();
@@ -211,10 +227,18 @@ class FixedMapStrategy implements MapStrategy {
         grid[6][7] = new Tile(Tile.Type.STONE);
         grid[7][7] = new Tile(Tile.Type.STONE);
 
-        // Three chests to find
-        grid[1][8] = new Tile(Tile.Type.CHEST);
-        grid[5][6] = new Tile(Tile.Type.CHEST);
-        grid[8][1] = new Tile(Tile.Type.CHEST);
+        // Three chests to find - each with unique loot
+        Tile chest1 = new Tile(Tile.Type.CHEST);
+        chest1.setChestLoot("Loot A");
+        grid[1][8] = chest1;
+
+        Tile chest2 = new Tile(Tile.Type.CHEST);
+        chest2.setChestLoot("Loot B");
+        grid[5][6] = chest2;
+
+        Tile chest3 = new Tile(Tile.Type.CHEST);
+        chest3.setChestLoot("Loot C");
+        grid[8][1] = chest3;
 
         return grid;
     }
@@ -240,13 +264,16 @@ class RandomMapStrategy implements MapStrategy {
             }
         }
 
-        // Place exactly 3 chests on random GRASS tiles
+        // Place exactly 3 chests on random GRASS tiles - each with unique loot
+        String[] lootOptions = {"Diamonds", "Iron", "Gold"};
         int chestsPlaced = 0;
         while (chestsPlaced < 3) {
             int row = rand.nextInt(height);
             int col = rand.nextInt(width);
             if (grid[row][col].getType() == Tile.Type.GRASS) {
-                grid[row][col] = new Tile(Tile.Type.CHEST);
+                Tile chest = new Tile(Tile.Type.CHEST);
+                chest.setChestLoot(lootOptions[chestsPlaced]);
+                grid[row][col] = chest;
                 chestsPlaced++;
             }
         }

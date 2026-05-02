@@ -32,10 +32,10 @@ public class WorldTest {
     }
 
     @Test
-    public void testColumnFourIsWater() {
-        // FixedMapStrategy places water along entire column 4
-        assertEquals(Tile.Type.WATER, world.getTile(4, 0).getType());
-        assertEquals(Tile.Type.WATER, world.getTile(4, 5).getType());
+    public void testWaterPondExists() {
+        // FixedMapStrategy places water pond at (3,3), (3,4), (4,3), (4,4)
+        assertEquals(Tile.Type.WATER, world.getTile(3, 3).getType());
+        assertEquals(Tile.Type.WATER, world.getTile(4, 4).getType());
     }
 
     @Test

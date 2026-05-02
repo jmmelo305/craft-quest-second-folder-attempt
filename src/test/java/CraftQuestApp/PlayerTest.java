@@ -52,11 +52,11 @@ public class PlayerTest {
 
     @Test
     public void testCannotMoveIntoWater() {
-        // Column 4 is water in FixedMapStrategy
-        // Place player at x=3 and try to walk right into water
-        Player p = new Player(3, 0);
+        // Water pond at (3,3), (3,4), (4,3), (4,4) in FixedMapStrategy
+        // Place player at (2,3) and try to walk right into water at (3,3)
+        Player p = new Player(2, 3);
         p.move(1, 0, world);
-        assertEquals(3, p.getX()); // blocked — should not move
+        assertEquals(2, p.getX()); // blocked — should not move
     }
 
     @Test
